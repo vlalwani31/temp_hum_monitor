@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+{% if result %}
+    <div class="content-section">
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4">{{ result }}</legend>
+        </fieldset>
+        <div class="form-group">
+          <a class="btn btn-outline-info" href="{{ returner }}"> Let's Go Back</a>
+        </div>
+    </div>
+{% else %}
+    <div class="content-section">
+      <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+          <div class="form-group">
+            {{ form.Lat.label(class="form-control-label") }}
+            {{ form.Lat(class="form-control form-control-lg", id="LAT1") }}
+          </div>
+          <div class="form-group">
+            {{ form.Long.label(class="form-control-label") }}
+            {{ form.Long(class="form-control form-control-lg", id="LONG1") }}
+          </div>
+        </fieldset>
+        <div class="form-group">
+          {{ form.submit(class="btn btn-outline-info", id="Submitbutton") }}
+        </div>
+        <script>
+          if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = {
+                      lat: position.coords.latitude,
+                      lng: position.coords.longitude
+                    };
+                    document.getElementById('LAT1').value = pos.lat;
+                    document.getElementById('LONG1').value = pos.lng;
+                    document.getElementById('Submitbutton').click();
+                  }, function(){
+                    var h4 = document.createElement("h4");
+                    h4.textContet = "Error: The Geolocation service failed.";
+                    document.body.appendChild(h4);
+                  });
+                } else {
+                  //document.getElementById('LAT1').value = -34.397;
+                  //document.getElementById('LONG1').value = 150.644;
+                  //document.getElementById('Submitbutton').click();
+                  var h4 = document.createElement("h4");
+                  h4.textContet = "Error: Your browser doesn\'t support geolocation.";
+                  document.body.appendChild(h4);
+                }
+        </script>
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRMbVO4MPpM0KEfDoai-S6bkNgMC6z0yk&callback=initMap">
+        </script>
+      </form>
+    </div>
+{% endif %}
+{% endblock content %}

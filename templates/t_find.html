@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+      <div class="content-section">
+        <form method="POST" action="">
+          {{ form.hidden_tag() }}
+          <fieldset class="form-group">
+            {% if reporter %}
+                    <legend class="border-bottom mb-4">{{ reporter }}</legend>
+            {% else %}
+                    <legend class="border-bottom mb-4">Let's Find Some Temperatures Today</legend>
+            {% endif %}
+            <div class="form-group">
+              {{ form.CityName.label(class="form-control-label") }}
+              {{ form.CityName(class="form-control form-control-lg") }}
+            </div>
+          </fieldset>
+          <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+          </div>
+        </form>
+      </div>
+{% endblock content %}

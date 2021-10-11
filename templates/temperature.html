@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+      <h1>Temperature Page</h1>
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Please Select one of the options</legend>
+        <div class="form-group">
+          <a class="btn btn-outline-info" href="/temperature/current" style="width:180px;">Current Location</a>
+        </div>
+        <div class="form-group">
+          <a class="btn btn-outline-info" href="/temperature/find" style="width:180px;">Find a Location</a>
+        </div>
+        <div class="form-group">
+          <a class="btn btn-outline-info" href="/temperature/add" style="width:180px;">Add a Sensor</a>
+        </div>
+        <div class="form-group">
+          <a class="btn btn-outline-info" href="/temperature/delete" style="width:180px;">Delete a Sensor</a>
+        </div>
+        <div class="form-group">
+          <a class="btn btn-outline-info" href="/temperature/saved" style="width:180px;">Show all Sensors</a>
+        </div>
+      </fieldset>
+{% endblock content %}

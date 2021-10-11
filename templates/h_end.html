@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+      <div class="content-section">
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4"> This is the Humidity from your sensor</legend>
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                  <div class="card">
+                      <div class="card-body">
+                          <canvas id="canvas" style="width:800px;height:600px;"></canvas>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div class="form-group">
+          <br><a class="btn btn-outline-info" href="{{ returner }}"> Let's Go Back</a>
+        </div>
+      </div>
+      <!--suppress JSUnresolvedLibraryURL -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+      <!--suppress JSUnresolvedLibraryURL -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+      <!--suppress JSUnresolvedLibraryURL -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+      <script>
+      $(document).ready(function () {
+        const config = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: "Humidity in Percentage",
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [],
+                    fill: false,
+                }],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Data from the humidity sensor'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Humidity(%)'
+                        }
+                    }]
+                }
+            }
+        };
+
+        const context = document.getElementById('canvas').getContext('2d');
+
+        const lineChart = new Chart(context, config);
+
+        const source = new EventSource("/Humid_Data_Plotter");
+
+        source.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            if (config.data.labels.length === 20) {
+                config.data.labels.shift();
+                config.data.datasets[0].data.shift();
+            }
+            config.data.labels.push(data.time);
+            config.data.datasets[0].data.push(data.value);
+            lineChart.update();
+        }
+      });
+      </script>
+{% endblock content %}
